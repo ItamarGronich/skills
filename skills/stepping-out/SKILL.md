@@ -41,21 +41,23 @@ Drive `create_file` and Docs `update_doc` with `insertComment` ran without promp
    - Call Docs `update_doc` with one `insertComment` request, setting `writeControl.requiredRevisionId` to that `revisionId`:
      ```json
      {"insertComment": {"range": {"startIndex": 1, "endIndex": <end of first paragraph minus 1>, "tabId": "t.0"},
-                        "content": "+itamar.gronich@fiverr.com <one line: what this is and what you need from them>"}}
+                        "content": "+itamar.gronich@fiverr.com Claude: <one line: what this is and what you need from them>"}}
      ```
-   - The `+email` prefix is what makes it a mention. The comment text is what shows in the Slack and email notifications, so make it say what the doc is and whether the user needs to act, for example "+itamar.gronich@fiverr.com Spec fix plan for #2715 is ready. Need your call on step 1 (shared helper or inline)."
+   - The `+email` prefix is what makes it a mention. `Claude:` marks the comment as Claude's, because Claude posts with the user's account and the `doc-watch` skill needs to tell the two apart.
+   - The comment text is what shows in the Slack and email notifications, so make it say what the doc is and whether the user needs to act. For example: "+itamar.gronich@fiverr.com Claude: Spec fix plan for #2715 is ready. Need your call on step 1 (shared helper or inline)."
    - Check the reply: `insertComment.commentThread.status` should be `OPEN`, and `contentHtml` should contain the mailto link.
-6. **Tell the user in the terminal** in one or two lines: the doc link and that they were notified. They'll see it when they're back.
+6. **Save a snapshot** of the doc text, as `read_file_content` returned it, to `~/.claude/doc-watch/<docId>.md` with the Write tool. `doc-watch` compares the doc against it to find what the user typed.
+7. **Tell the user in the terminal** in one or two lines: the doc link and that they were notified. They'll see it when they're back. If they want their replies answered while they're away, offer to start `doc-watch`.
 
 ## Follow-up updates on the same topic
 
-- For a short follow-up, like a status change or a test result, reply in the existing comment thread or add a new comment with a mention on the same doc, so everything on one topic stays in one place.
+- For a short follow-up, like a status change or a test result, add a new `Claude:` comment with a mention on the same doc, so everything on one topic stays in one place. The Docs API can't reply inside an existing thread, so anchor the new comment on the same text.
 - Create a new doc only for a new topic or a full new write-up.
-- If you edit the doc's text, follow the `google-workspace` Docs rules, and don't replace text that has a comment attached.
+- If you edit the doc's text, follow the `google-workspace` Docs rules, don't replace text that has a comment attached, and save a new snapshot afterwards.
 
 ## Reading the user's replies
 
-The user may answer in the comment thread from their phone. To read the answers, use Drive `read_file_content` with `includeComments: true` on the doc. Treat a reply as the user's answer to what the comment asked. It counts as the user's approval only for what that comment asked.
+The user answers by commenting or by typing into the doc. Use the `doc-watch` skill to find and answer those, once or on a loop.
 
 ## Rules
 
