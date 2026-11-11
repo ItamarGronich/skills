@@ -13,6 +13,15 @@ Never include details that are relevant only to the current discussion or of pas
 
 Don't use jargon and speak coherently. State it simply and concisely, like one human talking to another.
 
+## No ticket links or plans
+
+Don't link tickets (Monday, Jira, GitHub issues) and don't describe work that is planned. Tickets get closed and plans change, and the reader needs the reason, not the backlog. Name a concrete example in plain words instead, and write it as if the planned state is already true:
+
+- Not: `// Needed for the styling vendor, see https://fiverr.monday.com/.../13124665506`
+- But: `// The vendors after it, like the styling vendor, read React from these globals.`
+
+Ticket links belong in the PR description and the commit message.
+
 ## Before you save
 
 Reread the comment and cut anything the reader has no way to see:
@@ -20,5 +29,6 @@ Reread the comment and cut anything the reader has no way to see:
 - a bug that was just fixed, or a value the code used to have
 - something that was tried and abandoned
 - anything that only makes sense if you were in the conversation
+- a ticket link, or a plan for work that isn't done yet
 
 Keep it only when the reader would otherwise be tempted to simplify the code back into the problem it is avoiding.
